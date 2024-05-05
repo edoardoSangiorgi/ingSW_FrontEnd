@@ -1,11 +1,13 @@
-<script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
+<script setup>
+import ContatoreBis from './ContatoreBis.vue'
+
+
 </script>
 
 <template>
   <header>
     <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+      <ContatoreBis />
     </div>
   </header>
 
