@@ -4,7 +4,7 @@
   <div class="chat-container">
    
     <div class="chat-header">
-      <img src="/Users/giuliapanarello/Desktop/ingegneriadelsoftware/ingSW_FrontEnd/download.jpg" alt="Icona Gruppo">
+      <img src="/Users/giuliapanarello/Desktop/ingegneriadelsoftware/ingSW_FrontEnd/src/components/download.jpg" alt="Icona Gruppo">
       <h2 class="text-titolo"> Organizzazione Evento</h2>
       <p>...</p>
     </div>
@@ -114,7 +114,7 @@ import 'leaflet/dist/leaflet.css'; // Importa i file CSS di Leaflet.js
   padding:0px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  background-image:  url('/Users/giuliapanarello/Desktop/ingegneriadelsoftware/ingSW_FrontEnd/azzurro.jpg');
+  background-image:  url('/Users/giuliapanarello/Desktop/ingegneriadelsoftware/ingSW_FrontEnd/src/components/azzurro.jpg');
   background-size: cover; 
   background-position: center; 
    
@@ -220,4 +220,5 @@ import 'leaflet/dist/leaflet.css'; // Importa i file CSS di Leaflet.js
 
 
 </style>
+  
   
