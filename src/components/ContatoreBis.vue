@@ -44,7 +44,7 @@
     data() {
       return {
         messages: [
-        { sender: 'Alice', text: 'Ciao a tutti!', timestamp: this.getCurrentTime(), type: 'text' },
+        { sender: 'Giulia', text: 'Ciao a tutti!', timestamp: this.getCurrentTime(), type: 'text' },
         { sender: 'Tu', text: 'Ciao Giulia!', timestamp: this.getCurrentTime(), type: 'text' },
         
         ], // Array di messaggi
