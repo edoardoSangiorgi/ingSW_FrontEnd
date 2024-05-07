@@ -4,7 +4,8 @@
   <div class="chat-container">
     
     <div class="chat-header">
-      <img src="https://media.istockphoto.com/id/512895568/it/vettoriale/andare-fuori-con-gli-amici.jpg?s=170667a&w=0&k=20&c=LFvXYJ_OUmp6EnkKF_N1rhj2uOMOTwXD_YT7ux6vO00" alt="Icona Gruppo">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvoX2HbQn78YpCfCeyV6oqkp1lQbjQOG2kNn2gKzHbPPTkamA2
+" alt="Icona Gruppo">
       <h2 class="text-titolo"> Organizzazione Evento</h2>
       <p>Apertura pub 2024</p>
     </div>
@@ -44,7 +45,7 @@
     data() {
       return {
         messages: [
-        { sender: 'Giulia', text: 'Ciao a tutti!', timestamp: this.getCurrentTime(), type: 'text' },
+        { sender: 'Alice', text: 'Ciao a tutti!', timestamp: this.getCurrentTime(), type: 'text' },
         { sender: 'Tu', text: 'Ciao Giulia!', timestamp: this.getCurrentTime(), type: 'text' },
         
         ], // Array di messaggi
@@ -196,4 +197,5 @@
  
 
 
-</style>  
+</style>
+  
