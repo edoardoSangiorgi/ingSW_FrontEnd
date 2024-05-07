@@ -4,7 +4,7 @@
   <div class="chat-container">
    
     <div class="chat-header">
-      <img src="/Users/giuliapanarello/Desktop/ingegneriadelsoftware/ingSW_FrontEnd/src/components/download.jpg" alt="Icona Gruppo">
+      <img src="https://lens.google.com/search?ep=gisbubb&hl=it&re=df&p=AbrfA8qqWBP_UPMSNU_EZ8GVzromIhhbbUX3yVqLYMwKW-AJbILqdDhoDXd4qwx-BTrdHz_9q-f5XIHvhcpvduW6EpEIyyRLwgzdmjFnMETTMvzyVCOqvp1nwJinwk4JU3dfB2TBrgmm5kRiGNhZHsh9DotxWh33TSLOYw6bT7S9WWnBsgmT1bhc_RFdiJOl3X0R1jbY6YUoI-t2hGzuvV-tgIdyqRlrmTURQKi_uJv01utdOV9vUL0iMwFeakvZY7-_xcPMaznU3Kw-ZGTp3jaQXKw%3D#lns=W251bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsIkVrY0tKR0psT0RnME9EUm1MVEZpTUdJdE5ESm1aUzA0WXpNNExUZ3paRFV3TnpnM05UQTJOQklmVlRnM2RrWjNiVFJ5V0dkWU5FWXpjRVF5ZGpoaFkzVmxhVEZ6TnpsU1p3PT0iLG51bGwsbnVsbCxbW251bGwsbnVsbCwiMC0wIl0sWyI5MTNlZWY2Zi02MWQ2LTQ3MGYtOTU0My1kZjQ4ZWFiMmYwMDMiXV1d alt="Icona Gruppo">
       <h2 class="text-titolo"> Organizzazione Evento</h2>
       <p>...</p>
     </div>
