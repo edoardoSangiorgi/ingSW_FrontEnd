@@ -2,11 +2,11 @@
 <template>
 
   <div class="chat-container">
-   
+    
     <div class="chat-header">
-      <img src="https://lens.google.com/search?ep=gisbubb&hl=it&re=df&p=AbrfA8qqWBP_UPMSNU_EZ8GVzromIhhbbUX3yVqLYMwKW-AJbILqdDhoDXd4qwx-BTrdHz_9q-f5XIHvhcpvduW6EpEIyyRLwgzdmjFnMETTMvzyVCOqvp1nwJinwk4JU3dfB2TBrgmm5kRiGNhZHsh9DotxWh33TSLOYw6bT7S9WWnBsgmT1bhc_RFdiJOl3X0R1jbY6YUoI-t2hGzuvV-tgIdyqRlrmTURQKi_uJv01utdOV9vUL0iMwFeakvZY7-_xcPMaznU3Kw-ZGTp3jaQXKw%3D#lns=W251bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsIkVrY0tKR0psT0RnME9EUm1MVEZpTUdJdE5ESm1aUzA0WXpNNExUZ3paRFV3TnpnM05UQTJOQklmVlRnM2RrWjNiVFJ5V0dkWU5FWXpjRVF5ZGpoaFkzVmxhVEZ6TnpsU1p3PT0iLG51bGwsbnVsbCxbW251bGwsbnVsbCwiMC0wIl0sWyI5MTNlZWY2Zi02MWQ2LTQ3MGYtOTU0My1kZjQ4ZWFiMmYwMDMiXV1d alt="Icona Gruppo">
+      <img src="https://media.istockphoto.com/id/512895568/it/vettoriale/andare-fuori-con-gli-amici.jpg?s=170667a&w=0&k=20&c=LFvXYJ_OUmp6EnkKF_N1rhj2uOMOTwXD_YT7ux6vO00" alt="Icona Gruppo">
       <h2 class="text-titolo"> Organizzazione Evento</h2>
-      <p>...</p>
+      <p>Apertura pub 2024</p>
     </div>
 
     <div v-for="(message, index) in messages" :key="index" :class="{'sent-message': message.sender === 'Tu', 'received-message': message.sender !== 'Tu'}">
@@ -23,9 +23,14 @@
 
     <div class="chat-input">
       <input v-model="newMessage" @keyup.enter="sendMessage" placeholder="Scrivi un messaggio...">
-      <emoji-mart @emoji="handleEmojiSelect" />
-      <div id="map" class="map"></div>
-    <button @click="sendLocation">Invia Posizione</button>
+      
+      <button @click="sendLocation">
+      <!-- Includi l'icona SVG inline come pulsante per la posizione -->
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="location-icon">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM9.17 15H7l4-8h2.17l-4 8zM12 4c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6.83 11h-2.17l-4-8h2.17l4 8z"/>
+        <path d="M0 0h24v24H0z" fill="none"/>
+      </svg>
+    </button>
     <button @click="sendMessage">Invia</button>
     </div>
   </div>
@@ -33,22 +38,17 @@
 
   
   <script>
-import L from 'leaflet'; // Importa Leaflet.js
-import 'leaflet/dist/leaflet.css'; // Importa i file CSS di Leaflet.js
 
 
   export default {
-
- 
     data() {
       return {
         messages: [
-        { sender: 'Giulia', text: 'Ciao a tutti!', timestamp: this.getCurrentTime(), type: 'text' },
+        { sender: 'Alice', text: 'Ciao a tutti!', timestamp: this.getCurrentTime(), type: 'text' },
         { sender: 'Tu', text: 'Ciao Giulia!', timestamp: this.getCurrentTime(), type: 'text' },
         
         ], // Array di messaggi
         newMessage: '', // Nuovo messaggio in input
-        map: null
       };
     },
     methods: {
@@ -73,36 +73,11 @@ import 'leaflet/dist/leaflet.css'; // Importa i file CSS di Leaflet.js
       },
 
       sendLocation() {
-      // Controlla se il browser supporta la geolocalizzazione
-      if (navigator.geolocation) {
-        // Ottieni la posizione attuale
-        navigator.geolocation.getCurrentPosition(position => {
-          const { latitude, longitude } = position.coords;
-          // Visualizza la mappa con la posizione attuale
-          this.showMap(latitude, longitude);
-        }, error => {
-          console.error("Errore durante il recupero della posizione:", error);
-        });
-      } else {
-        console.error("Geolocalizzazione non supportata dal browser.");
+      // Implementa la logica per inviare la posizione
+      console.log('Invia posizione');
       }
     },
-    showMap(latitude, longitude) {
-      // Crea una mappa Leaflet.js e imposta la posizione attuale come centro
-      const map = L.map('map').setView([latitude, longitude], 13);
-      
-      // Aggiungi un layer di mappa OpenStreetMap
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-      
-      // Aggiungi un marker sulla mappa per indicare la posizione
-      L.marker([latitude, longitude]).addTo(map)
-        .bindPopup('La tua posizione attuale.')
-        .openPopup();
-    }
-    }
-  }
-
-
+  };
   </script>
   
   <style scoped> 
@@ -114,7 +89,7 @@ import 'leaflet/dist/leaflet.css'; // Importa i file CSS di Leaflet.js
   padding:0px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  background-image:  url('/Users/giuliapanarello/Desktop/ingegneriadelsoftware/ingSW_FrontEnd/src/components/azzurro.jpg');
+  background-image: url('https://i.pinimg.com/originals/c4/23/12/c4231254ad6f3a92d902a8356212809c.jpg'); 
   background-size: cover; 
   background-position: center; 
    
@@ -165,14 +140,19 @@ import 'leaflet/dist/leaflet.css'; // Importa i file CSS di Leaflet.js
   
   .chat-input button {  /* invia bottone */
     padding: 20px 40px;
-    background-color: #0da0ef; 
-    color: #3119e5; /* colore invia */
+    background-color: #00e4fd; 
+    color: #1b18e2; /* colore invia */
     border: none;
     border-radius: 0 10px 10px 0;
     
     cursor: pointer;
   }
 
+  .location-icon {
+  width: 25px;
+  height: 25px;
+  fill: #0da0ef; /* Colore dell'icona */
+}
 
 .sent-message {
   display: flex;
@@ -192,8 +172,8 @@ import 'leaflet/dist/leaflet.css'; // Importa i file CSS di Leaflet.js
 }
 
 .sent-message .message-content {
-  background-color: #017cff;
-  color: rgb(246, 249, 249);
+  background-color: #007bff;
+  color: white;
 }
 
 .text {
@@ -202,23 +182,18 @@ import 'leaflet/dist/leaflet.css'; // Importa i file CSS di Leaflet.js
 
 .timestamp {
   font-size: 12px;
-  color: #080707;
+  color: #888;
 }
 
 .user-icon {
   font-size: 50px; /* Imposta la dimensione dell'icona */
   color: #007bff; /* Cambia il colore dell'icona */
   background-color: #24517e; /* Cambia il colore dello sfondo del cerchio */
-  border: 2px solid #6e7e8f; /* Aggiunge un bordo al cerchio */
+  border: 2px solid #007bff; /* Aggiunge un bordo al cerchio */
   border-radius: 50%; /* Rende il contenuto del cerchio */
   padding: 10px; /* Aggiunge spazio intorno all'icona */
 }
-
-#map {
-  height: 100px; /* Altezza della mappa */
-}
+ 
 
 
-</style>
-    
-  
+</style>  
