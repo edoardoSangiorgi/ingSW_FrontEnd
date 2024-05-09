@@ -2,11 +2,12 @@
   <input ref="fileInput" type="file" accept="image/*" capture="camera" style="display: none;" @change="handleFileInputChange">
 
   <div class="chat-container">
+
+    <div class="group-container">
     <div class="chat-header">
       <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvoX2HbQn78YpCfCeyV6oqkp1lQbjQOG2kNn2gKzHbPPTkamA2" alt="group-icon">
       <h2 class="text-titolo">Organizzazione Evento</h2>
-      <p>...</p>
-     
+      </div>
     </div>
 
     <div v-for="(message, index) in messages" :key="index" :class="{'sent-message': message.sender === 'Tu', 'received-message': message.sender !== 'Tu'}">
@@ -95,7 +96,7 @@ export default {
 <style scoped>
 
 .chat-container {
-
+  
   position: fixed;
   margin-top: 80px; /* Altezza della barra "Scrivi un messaggio" */
   left: 0;
@@ -115,10 +116,40 @@ export default {
   max-width: 100%;
 }
 
+.group-container {
+  position: fixed;
+ 
+  left: 0;
+  right: 0;
+  background-color: #007bff;
+  color: white;
+  padding: 0;
+}
+
+.group-name {
+  margin: 0;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.group-container img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.group-name {
+  margin: 0;
+  font-size: 24px;
+  font-weight: bold;
+}
+
 .chat-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  background-color: #007bff;
   margin: 20px auto;
   padding: 10px;
   max-width: 300px;
@@ -167,6 +198,7 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
+
 }
 
 
