@@ -1,9 +1,12 @@
 <template>
+  <input ref="fileInput" type="file" accept="image/*" capture="camera" style="display: none;" @change="handleFileInputChange">
+
   <div class="chat-container">
     <div class="chat-header">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvoX2HbQn78YpCfCeyV6oqkp1lQbjQOG2kNn2gKzHbPPTkamA2" alt="Icona Gruppo">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvoX2HbQn78YpCfCeyV6oqkp1lQbjQOG2kNn2gKzHbPPTkamA2" alt="group-icon">
       <h2 class="text-titolo">Organizzazione Evento</h2>
       <p>...</p>
+     
     </div>
 
     <div v-for="(message, index) in messages" :key="index" :class="{'sent-message': message.sender === 'Tu', 'received-message': message.sender !== 'Tu'}">
@@ -19,19 +22,20 @@
 
     <div class="chat-input">
       <div class="input-wrapper">
+      </div>
+        <input v-model="newMessage" @keyup.enter="sendMessage" placeholder="Scrivi un messaggio...">
+    
         <div class="additional-features" @click="toggleAdditionalOptions">
           <i class="fas fa-plus"></i>
-        </div>
-        <input v-model="newMessage" @keyup.enter="sendMessage" placeholder="Scrivi un messaggio...">
-      </div>
-      <button @click="sendMessage">Invia</button>
-    </div>
-
-    <div v-if="showAdditionalOptions" class="additional-options">
+          <div v-if="showAdditionalOptions" class="additional-options">
       <div @click="openCamera">Fotocamera</div>
       <div @click="sendLocation">Posizione</div>
       <div @click="sendFile">Immagine</div>
     </div>
+  </div>
+      <button @click="sendMessage">Invia</button>
+    </div> 
+
   </div>
 </template>
 
@@ -69,11 +73,21 @@ export default {
       console.log('Invia posizione');
     },
     openCamera() {
-      console.log('Apri fotocamera');
+     
+      this.$refs.fileInput.click();
     },
+    handleFileInputChange(event) {
+  const file = event.target.files[0];
+  if (file) {
+    // Esegui qui la logica per gestire il file (ad esempio, mostrare l'immagine nell'interfaccia utente)
+    console.log('Immagine selezionata:', file);
+  }
+},
+
     sendFile() {
       console.log('Invia file');
     }
+    
   },
 };
 </script>
@@ -81,26 +95,40 @@ export default {
 <style scoped>
 
 .chat-container {
-  width: 200%;
-  max-width: 1200px;
-  height: 90vh;
-  margin: 0 auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 0px;
+
+  position: fixed;
+  margin-top: 80px; /* Altezza della barra "Scrivi un messaggio" */
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 100vh; /* Altezza massima della finestra */
   background-image: url('https://i.pinimg.com/originals/c4/23/12/c4231254ad6f3a92d902a8356212809c.jpg'); 
   background-size: cover; 
-  background-position: center; 
+  background-position: center;
+  overflow-y: auto; /* Per consentire lo scorrimento quando la chat diventa più lunga */
+  
 }
 
 .text-titolo{
   font-style: italic;
+  flex-grow: 1;
+  max-width: 100%;
 }
 
 .chat-header {
-  text-align: center;
-  margin-bottom: 60px;
-  background-color: #0da0ef;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 20px auto;
+  padding: 10px;
+  max-width: 300px;
+}
+
+
+.chat-header img {
+  width: 80px; /* Rimpicciolisci l'immagine dell'icona */
+  height: 80px; /* Rimpicciolisci l'immagine dell'icona */
+  border-radius: 50%; /* Arrotonda i bordi dell'immagine */
 }
 
 .chat-messages {
@@ -123,29 +151,42 @@ export default {
 .input-wrapper {
   display: flex;
   align-items: center;
+  
+}
+
+.input-wrapper input {
+  flex: 1; /* Occupa lo spazio rimanente */
 }
 
 .chat-input {
   display: flex;
-  justify-content: flex-end;
+  width: 100%;
+  justify-content: space-between;
   margin-top: 20px;
-  position: relative;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 20px;
 }
 
+
 .chat-input input {
-  flex: 1;
-  min-width: 0;
+  
+  width: calc(100% - 100px); /* Larghezza dell'input meno quella del pulsante Invia */
   padding: 10px;
-  border: 10px solid #0da0ef;
-  border-radius: 0 10px 10px 0;
+  border: 10px solid #007bff;
+  border-radius: 5px;
+   
 }
 
 .chat-input button {
-  padding: 20px 30px;
-  background-color: #00e4fd;
-  color: #1b18e2;
+  width: 80px;
+  padding: 10px;
+  margin-left: 10px;
   border: none;
   border-radius: 5px;
+  background-color: #007bff;
+  color: white;
   cursor: pointer;
 }
 
@@ -165,11 +206,12 @@ export default {
 }
 
 .message-content {
-  max-width: 70%;
+  max-width: 80%;
   margin: 10px;
   padding: 10px;
   border-radius: 10px;
   background-color: #f0f0f0;
+  margin-bottom: 35px;
 }
 
 .sent-message .message-content {
@@ -198,20 +240,28 @@ export default {
 .additional-features {
   background-color: #007bff;
   color: #fff;
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 55px;
   padding: 10px;
-  border-radius: 50%;
+  border-radius: 5px;;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  margin-right: 10px;
+  
+}
+
+.additional-features i{
+  font-size: 20px; /* Imposta la dimensione dell'icona */
 }
 
 .additional-options {
-  position: fixed;
+  position: absolute;
+  top:100%;
+  left: 0;
   bottom: 80px;
-  right: 20px;
+  
   background-color: #fff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
