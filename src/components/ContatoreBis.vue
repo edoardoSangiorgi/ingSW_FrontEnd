@@ -5,8 +5,9 @@
 
     <div class="group-container">
     <div class="chat-header">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvoX2HbQn78YpCfCeyV6oqkp1lQbjQOG2kNn2gKzHbPPTkamA2" alt="group-icon">
+      <img class="group-icon" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvoX2HbQn78YpCfCeyV6oqkp1lQbjQOG2kNn2gKzHbPPTkamA2" alt="group-icon">
       <h2 class="text-titolo">Organizzazione Evento</h2>
+     
       </div>
     </div>
 
@@ -22,18 +23,24 @@
     </div>
 
     <div class="chat-input">
+      
+      <div v-if="showAdditionalOptions" class="additional-options">
+        <div @click="openCamera">Fotocamera</div>
+        <div @click="sendLocation">Posizione</div>
+        <div @click="sendFile">Immagine</div>
+    </div>
+    
+      <div class="additional-features" @click="toggleAdditionalOptions">
+        
+          <i class="fas fa-plus"></i>
+  
+  </div>
       <div class="input-wrapper">
       </div>
+      
         <input v-model="newMessage" @keyup.enter="sendMessage" placeholder="Scrivi un messaggio...">
-    
-        <div class="additional-features" @click="toggleAdditionalOptions">
-          <i class="fas fa-plus"></i>
-          <div v-if="showAdditionalOptions" class="additional-options">
-      <div @click="openCamera">Fotocamera</div>
-      <div @click="sendLocation">Posizione</div>
-      <div @click="sendFile">Immagine</div>
-    </div>
-  </div>
+        
+        
       <button @click="sendMessage">Invia</button>
     </div> 
 
@@ -41,7 +48,11 @@
 </template>
 
 <script>
+
 export default {
+
+
+
   data() {
     return {
       messages: [
@@ -49,6 +60,7 @@ export default {
         { sender: 'Tu', text: 'Ciao Giulia!', timestamp: this.getCurrentTime(), type: 'text' },
       ],
       newMessage: '',
+      isRecording: false,
       showAdditionalOptions: false
     };
   },
@@ -56,6 +68,7 @@ export default {
     getCurrentTime() {
       return new Date().toLocaleTimeString();
     },
+
     sendMessage() {
       if (this.newMessage.trim() !== '') {
         this.messages.push({
@@ -87,8 +100,21 @@ export default {
 
     sendFile() {
       console.log('Invia file');
-    }
+    },
     
+    startRecording() {
+      navigator.mediaDevices.getUserMedia({ audio: true })
+        .then(stream => {
+          // Se il permesso è stato concesso, puoi iniziare la registrazione audio utilizzando lo stream
+          console.log('Accesso al microfono consentito');
+          // Qui puoi chiamare una funzione per iniziare la registrazione audio
+        })
+        .catch(error => {
+          // Se il permesso è stato negato o se si è verificato un altro errore, verrà eseguita questa funzione di gestione dell'errore
+          console.error('Errore durante l\'accesso al microfono:', error);
+          // Qui puoi gestire l'errore, ad esempio mostrando un messaggio all'utente
+        });
+    },
   },
 };
 </script>
@@ -110,6 +136,14 @@ export default {
   
 }
 
+
+.group-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
 .text-titolo{
   font-style: italic;
   flex-grow: 1;
@@ -117,13 +151,12 @@ export default {
 }
 
 .group-container {
-  position: fixed;
- 
-  left: 0;
-  right: 0;
+  display: flex;
+  align-items: center;
+  padding: 10px;
   background-color: #007bff;
+  justify-content: flex-start;
   color: white;
-  padding: 0;
 }
 
 .group-name {
@@ -137,12 +170,6 @@ export default {
   height: 80px;
   border-radius: 50%;
   margin-right: 10px;
-}
-
-.group-name {
-  margin: 0;
-  font-size: 24px;
-  font-weight: bold;
 }
 
 .chat-header {
@@ -189,6 +216,10 @@ export default {
   flex: 1; /* Occupa lo spazio rimanente */
 }
 
+.input-wrapper i {
+  margin-left: 10 px;
+}
+
 .chat-input {
   display: flex;
   width: 100%;
@@ -212,9 +243,9 @@ export default {
 }
 
 .chat-input button {
-  width: 80px;
+  width: 100px;
   padding: 10px;
-  margin-left: 10px;
+  margin-left: 0;
   border: none;
   border-radius: 5px;
   background-color: #007bff;
@@ -273,14 +304,14 @@ export default {
   background-color: #007bff;
   color: #fff;
   width: 30px;
-  height: 55px;
-  padding: 10px;
-  border-radius: 5px;;
+  height: 58px;
+  padding: 20px;
+  border-radius: 0px;;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  margin-right: 10px;
+  
   
 }
 
@@ -290,10 +321,10 @@ export default {
 
 .additional-options {
   position: absolute;
-  top:100%;
+  top: calc(100% + 10px);
   left: 0;
+  right: 0;
   bottom: 80px;
-  
   background-color: #fff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
@@ -310,4 +341,6 @@ export default {
 .additional-options > div:hover {
   background-color: #f0f0f0;
 }
+
+
 </style>
