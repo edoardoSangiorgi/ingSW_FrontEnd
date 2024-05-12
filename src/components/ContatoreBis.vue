@@ -1,3 +1,4 @@
+
 <template>
   <input ref="fileInput" type="file" accept="image/*" capture="camera" style="display: none;" @change="handleFileInputChange">
 
@@ -11,23 +12,42 @@
       </div>
     </div>
 
+   
     <div v-for="(message, index) in messages" :key="index" :class="{'sent-message': message.sender === 'Tu', 'received-message': message.sender !== 'Tu'}">
+      
       <div>
         <i class="fas fa-user-circle user icon"></i>
       </div>
       <div class="sender">{{ message.sender }}</div>
       <div class="message-content">
-        <div class="text">{{ message.text }}</div>
-        <div class="timestamp">{{ message.timestamp }}</div>
-      </div>
+        <!-- Se il messaggio è di tipo immagine, mostra l'immagine -->
+    <img v-if="message.type === 'image' && !message.isExpanded" :src="message.text" class="message-image" @click="handleMessageClick(message)" />
+    <!-- Se il messaggio è di tipo immagine ed è espanso, mostra l'immagine ingrandita -->
+    <img v-if="message.type === 'image' && message.isExpanded" :src="message.text" class="expanded-message-image" @click="handleMessageClick(message)" />
+    
+    <div v-if="message.type === 'text'" class="message-content">
+    <div class="text">{{ message.text }}</div>
+    <div class="timestamp">{{ message.timestamp }}</div>
     </div>
+      </div>
+
+      <!-- Area di overlay per visualizzare l'immagine ingrandita -->
+  <div v-if="message.type === 'image' && message.isExpanded" class="overlay" @click="handleMessageClick(message)">
+    <img :src="message.text" class="expanded-image" />
+  </div>
+
+
+</div>
 
     <div class="chat-input">
       
       <div v-if="showAdditionalOptions" class="additional-options">
         <div @click="openCamera">Fotocamera</div>
         <div @click="sendLocation">Posizione</div>
-        <div @click="sendFile">Immagine</div>
+        <div @click="openImageGallery">
+          <i class="fas fa-images"></i> Galleria
+        </div>
+        
     </div>
     
       <div class="additional-features" @click="toggleAdditionalOptions">
@@ -56,8 +76,8 @@ export default {
   data() {
     return {
       messages: [
-        { sender: 'Giulia', text: 'Ciao a tutti!', timestamp: this.getCurrentTime(), type: 'text' },
-        { sender: 'Tu', text: 'Ciao Giulia!', timestamp: this.getCurrentTime(), type: 'text' },
+      { sender: 'Giulia', text: 'Ciao a tutti!', timestamp: this.getCurrentTime(), type: 'text', isExpanded: false },
+      { sender: 'Tu', text: 'Ciao Giulia!', timestamp: this.getCurrentTime(), type: 'text', isExpanded: false },
       ],
       newMessage: '',
       isRecording: false,
@@ -65,6 +85,8 @@ export default {
     };
   },
   methods: {
+
+  
     getCurrentTime() {
       return new Date().toLocaleTimeString();
     },
@@ -80,27 +102,53 @@ export default {
         this.newMessage = '';
       }
     },
-    toggleAdditionalOptions() {
-      this.showAdditionalOptions = !this.showAdditionalOptions;
-    },
-    sendLocation() {
-      console.log('Invia posizione');
-    },
-    openCamera() {
-     
-      this.$refs.fileInput.click();
-    },
+
     handleFileInputChange(event) {
-  const file = event.target.files[0];
-  if (file) {
-    // Esegui qui la logica per gestire il file (ad esempio, mostrare l'immagine nell'interfaccia utente)
-    console.log('Immagine selezionata:', file);
+      const file = event.target.files[0];
+      if (file) {
+        console.log('Immagine selezionata:', file);
+
+        // Leggi il file come URL dati
+        const reader = new FileReader();
+        reader.onload = () => {
+          // Aggiungi un nuovo messaggio con l'immagine
+          this.messages.push({
+            sender: 'Tu',
+            text: reader.result, // Usa il risultato del caricamento del file come testo
+            timestamp: this.getCurrentTime(),
+            type: 'image'
+          });
+        };
+        reader.readAsDataURL(file);
+      }
+    },
+
+    handleMessageClick(message) {
+  if (message.type === 'image') {
+    // Se il messaggio è un'immagine e non è già espansa, espandilo
+    if (!message.isExpanded) {
+      message.isExpanded = true;
+    } else {
+      // Se il messaggio è già espanso, riducilo
+      message.isExpanded = false;
+    }
   }
 },
 
-    sendFile() {
-      console.log('Invia file');
+   
+
+    toggleAdditionalOptions() {
+      this.showAdditionalOptions = !this.showAdditionalOptions;
     },
+
+    sendLocation() {
+      console.log('Invia posizione');
+    },
+    
+    openImageGallery() {
+    // Simula il clic sull'input file per aprire la galleria delle immagini
+    this.$refs.fileInput.click();
+  },
     
     startRecording() {
       navigator.mediaDevices.getUserMedia({ audio: true })
@@ -198,6 +246,7 @@ export default {
   margin-bottom: 10px;
 }
 
+
 .sender {
   font-weight: bold;
 }
@@ -271,11 +320,22 @@ export default {
 .message-content {
   max-width: 80%;
   margin: 10px;
-  padding: 10px;
+  padding: 0px;
   border-radius: 10px;
   background-color: #f0f0f0;
-  margin-bottom: 35px;
+  margin-bottom: 10px;
+  position: relative;
 }
+
+.message-content img {
+  display: block; /* Imposta l'immagine come elemento block */
+  width: 10%; /* Imposta la larghezza dell'immagine al 100% del contenitore */
+  max-width: 100%; /* Assicura che l'immagine non superi mai la larghezza massima consentita */
+  border-radius: 5px; /* Arrotonda i bordi dell'immagine */
+  cursor: pointer; /* Cambia il cursore quando si passa sopra l'immagine */
+  
+}
+
 
 .sent-message .message-content {
   background-color: #007bff;
@@ -343,4 +403,28 @@ export default {
 }
 
 
+.expanded-message-image {
+  max-width: 100%;
+  max-height: 100%;
+  cursor: pointer;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7); /* Aggiungi un'opacità per l'overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.overlay img {
+  max-width: 90%; /* Limita la larghezza dell'immagine all'interno dell'overlay */
+  max-height: 90vh; /* Limita l'altezza dell'immagine all'interno dell'overlay */
+}
+
 </style>
+
