@@ -16,12 +16,16 @@
       </div>
     </div>
 
+        
+     <!-- Contenitore della data -->
+      <div class="message-date-container">
+        <div class="message-date-header">{{ formatDate(messages[messages.length - 1].timestamp) }}</div>
+      </div>
+
     <!-- Iterazione attraverso i messaggi -->
     <div v-for="(message, index) in messages" :key="index" :class="{'sent-message': message.sender === 'Tu', 'received-message': message.sender !== 'Tu'}">
-      <!-- Controllo della data del messaggio -->
-      <div v-if="index === 0 || messages[index - 1].date !== message.date" class="message-date">
-        {{ formatDate(message.date) }}
-      </div>
+     
+      
      
 
       <!-- Icona del mittente -->
@@ -106,29 +110,50 @@
     // Definizione dei metodi della componente
     methods: {
 
-      // Metodo per formattare la data
-      formatDate(date) {
-        const options = { year: 'numeric', month: 'short', day: 'numeric' };
-        return new Date(date).toLocaleDateString(undefined, options);
-      },
-    
-      // Metodo per ottenere l'ora corrente
-      getCurrentTime() {
-        return new Date().toLocaleTimeString();
-      },
+   
+   
+  
 
-      // Metodo per inviare un nuovo messaggio di testo
+  // Metodo per ottenere l'ora corrente
+  getCurrentTime() {
+    const now = new Date();
+  return now;
+  },
+
+  // Metodo per ottenere la data corrente formattata
+  getCurrentDate() {
+    const now = new Date();
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    return now.toLocaleDateString(undefined, options); // Restituisci la data formattata
+  },
+
+  // Metodo per ottenere la data formattata da un timestamp
+  formatDate(timestamp) {
+    const date = new Date(timestamp); // Crea un oggetto Date dal timestamp
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    return date.toLocaleDateString(undefined, options); // Formatta la data come desiderato
+  },
+
+ 
+
+
+
+
+    // Metodo per inviare un nuovo messaggio di testo
       sendMessage() {
         if (this.newMessage.trim() !== '') {
+          const timestamp = this.getCurrentTime(); // Ottieni l'orario corrente
           this.messages.push({
             sender: 'Tu',
             text: this.newMessage.trim(),
-            timestamp: this.getCurrentTime(),
+            timestamp: timestamp,
             type: 'text'
           });
         this.newMessage = '';
       }
     },
+
+    
 
       // Metodo per gestire il cambio di un file immagine
       handleFileInputChange(event) {
@@ -195,6 +220,7 @@
   background-position: center;
   /* Abilita lo scorrimento verticale quando la chat diventa più lunga della finestra */
   overflow-y: auto;
+  
 }
 
 
@@ -220,7 +246,7 @@
 }
 
 
-/* Stili per il contenitore del gruppo */
+/* Stili per il l'intestazione del gruppo */
 .group-container {
   /* Imposta il display come flex per allineare gli elementi in riga */
   display: flex;
@@ -345,6 +371,8 @@
   bottom: 0;
   /* Imposta il colore di sfondo */
   background-color: white;
+ 
+  
 }
 
 
@@ -504,7 +532,7 @@
   /* Imposta la posizione come relativa per consentire il posizionamento assoluto */
   position: relative;
   /* Imposta lo z-index per sovrapporre l'icona "+" alla galleria */
-  z-index: 2;
+  z-index: 1;
 }
 
 /* Stili per le icone delle opzioni aggiuntive */
@@ -524,7 +552,7 @@
   /* Allinea l'elemento alla destra */
   right: 0;
   /* Imposta l'altezza dell'elemento */
-  bottom: 80px;
+  bottom: 60px;
   /* Imposta il colore di sfondo */
   background-color: #fff;
   /* Aggiunge una leggera ombra al bordo */
@@ -537,6 +565,7 @@
   display: flex;
   /* Imposta la direzione dei flex in colonna */
   flex-direction: column;
+  z-index: 1;
 }
 
 /* Stili per le opzioni aggiuntive */
@@ -588,21 +617,43 @@
   max-height: 90vh;
 }
 
-
-
-/* Stili per la data del messaggio */
-.message-date {
-  /* Imposta la dimensione del testo */
-  font-size: 12px;
-  /* Imposta il colore del testo su grigio */
-  color: #888;
-  /* Centra il testo */
+/* Stili per il contenitore della data */
+.message-date-container {
+  /* Imposta la posizione come relativa */
+  position: relative;
+  /* Posiziona il contenitore sotto l'intestazione del gruppo di chat */
+  margin-top: 20px; /* Altezza dell'intestazione del gruppo di chat */
+  /* Imposta il testo per allinearlo al centro */
   text-align: center;
-  /* Aggiunge margine inferiore tra la data e il messaggio */
-  margin-bottom: 5px;
+  /* Riduce la larghezza del contenitore */
+  max-width: 250px; /* Regola la larghezza massima come desiderato */
+  margin: auto; /* Centra il contenitore orizzontalmente */
+  left:0;
+  right: 0;
+  
 }
 
+/* Stili per la visualizzazione della data nell'intestazione */
+.message-date-header {
+  /* Imposta uno sfondo bianco per la data */
+  background-color: white;
+  /* Aggiunge ombra al bordo */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  /* Imposta il padding */
+  padding: 8px 20px;
+  /* Imposta la dimensione del testo */
+  font-size: 16px;
+  /* Imposta il colore del testo su grigio */
+  color: #161414;
+  /* Arrotonda i bordi */
+  border-radius: 20px;
+  /* Aggiunge margine sopra per separare la data dal resto dell'intestazione */
+  margin-top: 10px;
+}
+
+
 </style>
+
 
 
 
