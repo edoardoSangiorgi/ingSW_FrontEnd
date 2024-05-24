@@ -60,31 +60,22 @@
 
   
   <!-- Barra di input per inviare messaggi -->
-  
+  <div class="chat-input">
+      <!-- Icona per aprire le opzioni aggiuntive -->
+      <div class="additional-features" @click="toggleAdditionalOptions">
+        <i class="fas fa-plus"></i>
+      </div>
       <!-- Opzioni aggiuntive -->
       <div v-if="showAdditionalOptions" class="additional-options">
         <div @click="openImageGallery">
           <i class="fas fa-images"></i> Galleria
         </div>
-      
-      
-    
-      <div class="chat-input">
-      <!-- Icona per aprire le opzioni aggiuntive -->
-      <div class="additional-features" @click="toggleAdditionalOptions">
-        <i class="fas fa-plus"></i>
       </div>
-    
-
-
       <!-- Barra di input per scrivere un nuovo messaggio -->
-      <div class="input-wrapper">
-      </div>
-          <input v-model="newMessage" @keyup.enter="sendMessage" placeholder="Scrivi un messaggio...">
-          <button @click="sendMessage">Invia</button>
-      </div> 
+      <input v-model="newMessage" @keyup.enter="sendMessage" placeholder="Scrivi un messaggio...">
+      <button @click="sendMessage">Invia</button>
+    </div>
   </div>
-</div>
 
 </template>
 
@@ -379,6 +370,7 @@
   bottom: 0;
   /* Imposta il colore di sfondo */
   background-color: white;
+  width: 100%;
  
   
 }
@@ -650,6 +642,8 @@
 
 
 </style>
+
+
 
 
 
