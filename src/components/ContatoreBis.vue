@@ -48,7 +48,7 @@
          <!-- Se il messaggio è di testo, mostra il testo e l'orario -->
         <div v-if="message.type === 'text'" class="message-content">
           <div class="text">{{ message.text }}</div>
-          <div class="timestamp">{{ message.timestamp }}</div>
+          <div class="timestamp">{{ formatTime(new Date(message.timestamp)) }}</div>
         </div>
       </div>
 
@@ -60,18 +60,21 @@
 
   
   <!-- Barra di input per inviare messaggi -->
-  <div class="chat-input">
+  
       <!-- Opzioni aggiuntive -->
       <div v-if="showAdditionalOptions" class="additional-options">
         <div @click="openImageGallery">
           <i class="fas fa-images"></i> Galleria
         </div>
-      </div>
+      
+      
     
+      <div class="chat-input">
       <!-- Icona per aprire le opzioni aggiuntive -->
       <div class="additional-features" @click="toggleAdditionalOptions">
         <i class="fas fa-plus"></i>
       </div>
+    
 
 
       <!-- Barra di input per scrivere un nuovo messaggio -->
@@ -81,6 +84,7 @@
           <button @click="sendMessage">Invia</button>
       </div> 
   </div>
+</div>
 
 </template>
 
@@ -108,16 +112,12 @@
     },
 
     // Definizione dei metodi della componente
-    methods: {
+  methods: {
 
    
-   
-  
-
   // Metodo per ottenere l'ora corrente
   getCurrentTime() {
-    const now = new Date();
-  return now;
+   return new Date();
   },
 
   // Metodo per ottenere la data corrente formattata
@@ -126,6 +126,14 @@
     const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
     return now.toLocaleDateString(undefined, options); // Restituisci la data formattata
   },
+
+  // Formato dell'orario
+  formatTime(timestamp) {
+        const date = new Date(timestamp);
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        return `${hours}:${minutes}`;
+      },
 
   // Metodo per ottenere la data formattata da un timestamp
   formatDate(timestamp) {
@@ -376,8 +384,6 @@
 }
 
 
-
-
 /* Stili per l'input dell'utente */
 .chat-input input {
   /* Imposta la larghezza dell'input meno quella del pulsante Invia */
@@ -410,15 +416,6 @@
   cursor: pointer;
 }
 
-
-/* Stili per l'icona della posizione */
-.location-icon {
-  /* Imposta la larghezza e l'altezza dell'icona */
-  width: 25px;
-  height: 25px;
-  /* Imposta il colore di riempimento dell'icona */
-  fill: #0da0ef;
-}
 
 
 /* Stili per i messaggi inviati dall'utente */
@@ -546,7 +543,7 @@
   /* Imposta la posizione come assoluta */
   position: absolute;
   /* Posiziona l'elemento sopra l'input */
-  top: calc(100% + 10px);
+  bottom: calc(100% + 10px);
   /* Allinea l'elemento alla sinistra */
   left: 0;
   /* Allinea l'elemento alla destra */
@@ -653,7 +650,6 @@
 
 
 </style>
-
 
 
 
