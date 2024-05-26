@@ -16,25 +16,25 @@
       </div>
     </div>
 
-        
+      
+    
      <!-- Contenitore della data -->
       <div class="message-date-container">
         <div class="message-date-header">{{ formatDate(messages[messages.length - 1].timestamp) }}</div>
       </div>
 
+
+    <!-- Contenitore dei messaggi di chat -->
+    <div class="chat-messages">
     <!-- Iterazione attraverso i messaggi -->
-    <div v-for="(message, index) in messages" :key="index" :class="{'sent-message': message.sender === 'Tu', 'received-message': message.sender !== 'Tu'}">
-     
-      
-     
-
+      <div v-for="(message, index) in messages" :key="index" :class="{'sent-message': message.sender === 'Tu', 'received-message': message.sender !== 'Tu'}">
       <!-- Icona del mittente -->
-      <div>
-        <i class="fas fa-user-circle user icon"></i>
-      </div>
+        <div>
+          <i class="fas fa-user-circle user icon"></i>
+        </div>
 
-      <!-- Nome del mittente -->
-      <div class="sender">{{ message.sender }}</div>
+        <!-- Nome del mittente -->
+        <div class="sender">{{ message.sender }}</div>
 
 
       <!-- Contenuto del messaggio -->
@@ -56,6 +56,7 @@
       <div v-if="message.type === 'image' && message.isExpanded" class="overlay" @click="handleMessageClick(message)">
         <img :src="message.text" class="expanded-image" />
       </div>
+    </div>
   </div>
 
   
@@ -81,6 +82,8 @@
 
 
 <script>
+
+
 
   export default {
 
@@ -134,11 +137,7 @@
   },
 
  
-
-
-
-
-    // Metodo per inviare un nuovo messaggio di testo
+  // Metodo per inviare un nuovo messaggio di testo
       sendMessage() {
         if (this.newMessage.trim() !== '') {
           const timestamp = this.getCurrentTime(); // Ottieni l'orario corrente
@@ -173,7 +172,8 @@
         };
         reader.readAsDataURL(file);
       }
-    },
+    }, 
+
 
       // Metodo per gestire il clic su un messaggio
       handleMessageClick(message) {
@@ -192,6 +192,10 @@
       toggleAdditionalOptions() {
       this.showAdditionalOptions = !this.showAdditionalOptions;
       },
+
+      openImageGallery() {
+      this.$refs.fileInput.click();
+    },
   },
 };
 
@@ -217,8 +221,8 @@
   background-size: cover;
   /* Posiziona l'immagine di sfondo al centro */
   background-position: center;
-  /* Abilita lo scorrimento verticale quando la chat diventa più lunga della finestra */
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
   
 }
 
@@ -254,7 +258,7 @@
   /* Aggiunge padding intorno al contenitore */
   padding: 10px;
   /* Imposta il colore di sfondo del contenitore */
-  background-color: #007bff;
+  background-color: #0476f0;
   /* Allinea il contenuto del contenitore all'inizio */
   justify-content: flex-start;
   /* Imposta il colore del testo su bianco */
@@ -371,6 +375,7 @@
   /* Imposta il colore di sfondo */
   background-color: white;
   width: 100%;
+  position: sticky;
  
   
 }
@@ -642,6 +647,8 @@
 
 
 </style>
+
+
 
 
 
