@@ -1,4 +1,3 @@
-
 <template>
 
   <!-- Input per selezionare un file immagine -->
@@ -433,7 +432,7 @@
 /* Stili per il contenitore del messaggio */
 .message-content {
   /* Imposta la larghezza massima del contenitore del messaggio */
-  max-width: 80%;
+  max-width: 100%;
   /* Aggiunge margine intorno al contenitore del messaggio */
   margin: 10px;
   /* Imposta il padding del contenitore del messaggio */
@@ -453,7 +452,7 @@
   /* Imposta l'immagine come elemento block */
   display: block;
   /* Imposta la larghezza dell'immagine al 100% del contenitore */
-  width: 10%;
+  width: 100px;
   /* Imposta la larghezza massima dell'immagine */
   max-width: 100%;
   /* Arrotonda i bordi dell'immagine */
@@ -644,7 +643,7 @@
   /* Arrotonda i bordi */
   border-radius: 20px;
   /* Aggiunge margine sopra per separare la data dal resto dell'intestazione */
-  margin-top: -100px;
+  margin-top: -130px;
  
 
   
