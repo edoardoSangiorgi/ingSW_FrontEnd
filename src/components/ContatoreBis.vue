@@ -1,3 +1,4 @@
+
 <template>
 
   <!-- Input per selezionare un file immagine -->
@@ -23,7 +24,7 @@
         <div class="message-date-header">{{ formatDate(messages[messages.length - 1].timestamp) }}</div>
       </div>
 
-
+  
     <!-- Contenitore dei messaggi di chat -->
     <div class="chat-messages">
     <!-- Iterazione attraverso i messaggi -->
@@ -614,7 +615,7 @@
 /* Stili per il contenitore della data */
 .message-date-container {
   /* Imposta la posizione come relativa */
-  position: relative;
+  position: sticky;
   /* Posiziona il contenitore sotto l'intestazione del gruppo di chat */
   margin-top: 20px; /* Altezza dell'intestazione del gruppo di chat */
   /* Imposta il testo per allinearlo al centro */
@@ -624,6 +625,7 @@
   margin: auto; /* Centra il contenitore orizzontalmente */
   left:0;
   right: 0;
+  top:0;
   
 }
 
@@ -642,9 +644,11 @@
   /* Arrotonda i bordi */
   border-radius: 20px;
   /* Aggiunge margine sopra per separare la data dal resto dell'intestazione */
-  margin-top: 10px;
-}
+  margin-top: -100px;
+ 
 
+  
+}
 
 </style>
 
