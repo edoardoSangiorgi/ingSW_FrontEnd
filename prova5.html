@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat App</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* Stili CSS per la chat */
+        .chat-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .chat-item {
+            padding: 10px;
+            border-bottom: 1px solid #861414d6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .chat-item:hover {
+            background-color: rgba(21, 34, 86, 0.349);
+        }
+
+        /* Stili CSS per il bottone "New Chat" */
+        #new-chat-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 999;
+        }
+        button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+        }
+        button i {
+            color: rgb(8, 7, 7)(0, 0, 0);
+            font-size: 20px;
+        }
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        .button-container {
+            display: flex;
+            gap: 10px;
+        }
+        h2 {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div>
+            <h2>Chat List</h2>
+            <ul class="chat-list">
+                <li v-for="(chat, index) in chatList" :key="index" class="chat-item" @click="openChatInNewTab(chat)" @click="openChat(index)">
+                    <div>{{ chat.name }}</div>
+                    <div v-if="chat.lastMessage">{{ chat.lastMessage }}</div>
+                    <!-- bottone per cancellare le chat -->
+                    <div class="button-container">
+                        <button @click.stop="deleteChat(index)">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    <!-- bottone per rinominare le chat -->
+                    <button @click.stop="openRenameModal(chat, index)">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <button id="new-chat-btn" @click="openNewChatModal">NEW</button>
+
+        <!-- bottone per creare una nuova chat -->
+        <div v-if="isNewChatModalOpen" class="modal">
+            <div class="modal-content">
+                <h2>Create New Chat</h2>
+                <button @click="createSingleChat">Single Chat</button>
+                <button @click="createGroupChat">Group Chat</button>
+                <button @click="closeNewChatModal">Cancel</button>
+            </div>
+        </div>
+
+        <div v-if="currentChat !== null">
+            <h2>{{ currentChat.name }}</h2>
+            <ul class="chat-list">
+                <li v-for="(message, index) in currentChat.messages" :key="index" class="chat-item">
+                    <div>{{ message.sender }}:</div>
+                    <div>{{ message.text }}</div>
+                </li>
+            </ul>
+            <div>
+                <input type="text" v-model="newMessage" @keyup.enter="sendMessage" placeholder="Type your message">
+                <button @click="sendMessage">Send</button>
+            </div>
+        </div>
+        <!-- rinominare la chat  -->
+        <div v-if="isRenameModalOpen" class="modal"> 
+            <div class="modal-content">
+                <h2>Rename Chat</h2>
+                <input v-model="newChatName" placeholder="Enter new chat name">
+                <button @click="renameChat">Rename</button>
+                <button @click="closeRenameModal">Cancel</button>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                chatList: [
+                    {
+                        // esempio chat di gruppo con messaggi gia impostati all'apertura 
+                        name: 'IBIZA 2024', 
+                        isGroup: true, 
+                        participants: ['Angelo', 'Andrea', 'Ale', 'Mantu', 'User'],
+                        messages: [
+                            { sender: 'Angelo', text: 'Chicos, ¿estamos cargados o no para esta noche?'},
+                            { sender: 'Mantu', text: 'Vamos a bailar estoy caliente como el fuego' },
+                            { sender: 'Andrea', text: 'YA MANTU VAMOSSSSSS!!!!!!' },
+                            { sender: 'Ale', text: 'Vamos, las chicas me están esperando.' }
+                        ]
+                    },
+                    // lista chat con numi di utenti al quale mandare messaggi
+                    { name: 'Edoardo', isGroup: false, messages: [] },
+                    { name: 'Francesco', isGroup: false, messages: [] },
+                    { name: 'Angelo', isGroup: false, messages: [] },
+                    { name: 'Andrea', isGroup: false, messages: [] },
+                    { name: 'Giulia ', isGroup: false, messages: [] }
+                ],
+                currentChat: null,
+                newMessage: '',
+                isNewChatModalOpen: false,
+                //modifica
+                isRenameModalOpen: false,
+                newChatName: '',
+                chatToRename: null,
+                chatIndexToRename: null
+                /*chatList: [
+
+                    { name: 'Group Chat', isGroup: true, messages: [] },
+                    { name: 'Edoardo', isGroup: false, messages: [] },
+                    { name: 'Francesco', isGroup: false, messages: [] },
+                    { name: 'Angelo', isGroup: false, messages: [] },
+                    { name: 'Andrea', isGroup: false, messages: [] },
+                    { name: 'Davide', isGroup: false, messages: [] }
+                ],
+                currentChat: null,
+                newMessage: '',
+                isNewChatModalOpen: false */
+            },
+            methods: {
+                 openChat(index) {
+                    this.currentChat = this.chatList[index];
+                },
+                openNewChatModal() {
+                    this.isNewChatModalOpen = true;
+                },
+                closeNewChatModal() {
+                    this.isNewChatModalOpen = false;
+                },
+                createSingleChat() {
+                    // Implementazione per creare una nuova chat singola
+                    this.chatList.push({ name: 'Single Chat', isGroup: false, messages: [] });
+                    this.closeNewChatModal();
+                },
+                createGroupChat() {
+                    // Implementazione per creare una nuova chat di gruppo
+                    this.chatList.push({ name: 'Group Chat', isGroup: true, messages: [] });
+                    this.closeNewChatModal();
+                },
+                sendMessage() {
+                        if (this.newMessage.trim() !== '') {
+                const sender = this.currentChat.name;
+                 this.currentChat.messages.push({ sender: sender, text: this.newMessage });
+                  if (!this.currentChat.isGroup) {
+                 // Aggiorna l'ultimo messaggio nella lista delle chat
+                    this.chatList.forEach(chat => {
+                     if (chat.name === this.currentChat.name) {
+                     chat.lastMessage = this.newMessage;
+                }
+            });
+        }
+        this.newMessage = '';
+        
+    }
+},
+                 openChatInNewTab(chat) {
+                    // Serializza l'oggetto chat come stringa JSON
+                    const serializedChat = JSON.stringify(chat);
+                    // Codifica l'oggetto serializzato come URI
+                    const encodedChat = encodeURIComponent(serializedChat);
+                    // Genera l'URL per la nuova scheda
+                    const newTabUrl = `chat.html?chat=${encodedChat}`;
+                    // Apre la nuova scheda
+                    window.open(newTabUrl, '_blank');
+                },
+                // bottone per eleminare una chat dalla lista
+                deleteChat(index) {
+                    this.chatList.splice(index, 1);
+                },
+                openRenameModal(chat, index) {
+                    this.newChatName = chat.name;
+                    this.chatToRename = chat;
+                    this.chatIndexToRename = index;
+                    this.isRenameModalOpen = true;
+                },
+                closeRenameModal() {
+                    this.isRenameModalOpen = false;
+                    this.newChatName = '';
+                    this.chatToRename = null;
+                    this.chatIndexToRename = null;
+                },
+                renameChat() {
+                    if (this.newChatName.trim() !== '') {
+                        this.chatList[this.chatIndexToRename].name = this.newChatName;
+                        this.closeRenameModal();
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

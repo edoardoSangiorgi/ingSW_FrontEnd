@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <style>
+        .chat-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .message-list {
+            list-style: none;
+            padding: 0;
+        }
+        .message-item {
+            padding: 5px;
+            border-bottom: 1px solid #ccc;
+        }
+        .group-info-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        .group-info-btn img {
+            width: 20px;
+            height: 20px;
+        }
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        .participant-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 0;
+        }
+        .remove-btn {
+            background: none;
+            border: none;
+            color: red;
+            cursor: pointer;
+        }
+        .add-btn {
+            background: none;
+            border: none;
+            color: blue;
+            cursor: pointer;
+        }
+        .add-participant-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: blue;
+        }
+    </style>
+</head>
+<body>
+    <div id="chat-app">
+        <div class="chat-container">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h2>{{ chat.name }}</h2>
+                <button v-if="chat.isGroup" class="group-info-btn" @click="openGroupInfoModal">
+                    <img src="https://img.icons8.com/ios-filled/50/000000/menu-2.png" alt="Menu">
+                </button>
+            </div>
+            <ul class="message-list">
+                <li v-for="(message, index) in chat.messages" :key="index" class="message-item">
+                    <strong>{{ message.sender }}:</strong> {{ message.text }}
+                </li>
+            </ul>
+            <input v-model="newMessage" placeholder="Type your message" @keyup.enter="sendMessage">
+            <button @click="sendMessage">Send</button>
+        </div>
+
+        <div v-if="isGroupInfoModalOpen" class="modal">
+            <div class="modal-content">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h2>Group Members</h2>
+                    <button class="add-participant-btn" @click="openAddParticipantModal">+</button>
+                </div>
+                <ul>
+                    <li v-for="(participant, index) in chat.participants" :key="index" class="participant-item">
+                        {{ participant }}
+                        <button class="remove-btn" @click="removeParticipant(index)">Remove</button>
+                    </li>
+                </ul>
+                <button @click="closeGroupInfoModal">Close</button>
+            </div>
+        </div>
+
+        <div v-if="isAddParticipantModalOpen" class="modal">
+            <div class="modal-content">
+                <h2>Add Members</h2>
+                <ul>
+                    <li v-for="(user, index) in availableUsers" :key="index" class="participant-item">
+                        {{ user }}
+                        <button class="add-btn" @click="addParticipant(user)">Add</button>
+                    </li>
+                </ul>
+                <button @click="closeAddParticipantModal">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#chat-app',
+            data: {
+                chat: null,
+                newMessage: '',
+                currentUser: 'User',  // nome dell'utente che scrive nella chat 
+                isGroupInfoModalOpen: false,
+                isAddParticipantModalOpen: false,
+                availableUsers: []  // indica tutti gli utenti che posso essere aggiunti al gruppo 
+            },
+            created() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const chatData = urlParams.get('chat');
+                this.chat = JSON.parse(decodeURIComponent(chatData));
+
+                // tutti gli utenti che posso essere aggiunti al gruppo
+                const allUsers = ['Edoardo', 'Giulia', 'Francesco'];
+                this.availableUsers = allUsers.filter(user => !this.chat.participants.includes(user));
+            },
+            methods: {
+                sendMessage() {
+                    if (this.newMessage.trim() !== '') {
+                        this.chat.messages.push({ sender: this.currentUser, text: this.newMessage });
+                        this.newMessage = '';
+                    }
+                },
+                openGroupInfoModal() {
+                    this.isGroupInfoModalOpen = true;
+                },
+                closeGroupInfoModal() {
+                    this.isGroupInfoModalOpen = false;
+                },
+                openAddParticipantModal() {
+                    this.isAddParticipantModalOpen = true;
+                },
+                closeAddParticipantModal() {
+                    this.isAddParticipantModalOpen = false;
+                },
+                removeParticipant(index) {
+                    this.chat.participants.splice(index, 1);
+                    this.updateAvailableUsers();
+                },
+                // funzione che aggiunge i partecipanti al gruppo
+                addParticipant(user) {
+                    this.chat.participants.push(user);
+                    this.updateAvailableUsers();
+                },
+                // update visivo delle persone aggiunte al gruppo 
+                updateAvailableUsers() {
+                    const allUsers = ['Edoardo', 'Giulia', 'Francesco'];
+                    this.availableUsers = allUsers.filter(user => !this.chat.participants.includes(user));
+                }
+            }
+        });
+    </script>
+</body>
+</html>
