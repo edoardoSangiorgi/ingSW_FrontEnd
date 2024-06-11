@@ -34,7 +34,7 @@
         </div>
 
         <!-- Nome del mittente -->
-        <div class="sender">{{ message.sender }}</div>
+        <div class="sender" @click="redirectToPrivateChat(message.sender)">{{ message.sender }}</div>
 
 
       <!-- Contenuto del messaggio -->
@@ -74,8 +74,10 @@
       </div>
       <!-- Barra di input per scrivere un nuovo messaggio -->
       <input v-model="newMessage" @keyup.enter="sendMessage" placeholder="Scrivi un messaggio...">
+
       <button @click="sendMessage">Invia</button>
-    </div>
+      
+      </div>
   </div>
 
 </template>
@@ -102,6 +104,7 @@
         showAdditionalOptions: false,
         // Data predefinita per i messaggi
         date: '2024-05-16' // Aggiungi il campo data al messaggio
+        
       };
     },
 
@@ -196,6 +199,13 @@
       openImageGallery() {
       this.$refs.fileInput.click();
     },
+
+    redirectToPrivateChat(userId) {
+    // Utilizza il router per reindirizzare l'utente alla chat privata con l'ID dell'utente
+    this.$router.push({ name: 'privateChat', params: { userId } });
+  }
+
+
   },
 };
 
@@ -258,7 +268,7 @@
   /* Aggiunge padding intorno al contenitore */
   padding: 10px;
   /* Imposta il colore di sfondo del contenitore */
-  background-color: #0476f0;
+  background-color: #146ac7;
   /* Allinea il contenuto del contenitore all'inizio */
   justify-content: flex-start;
   /* Imposta il colore del testo su bianco */
@@ -286,8 +296,6 @@
   align-items: center;
   /* Distribuisci uniformemente lo spazio tra gli elementi */
   justify-content: space-between;
-  /* Imposta il colore di sfondo dell'intestazione */
-  background-color: #007bff;
   /* Aggiunge margine sopra e sotto all'intestazione */
   margin: 20px auto;
   /* Aggiunge spazio intorno all'intestazione */
@@ -388,7 +396,7 @@
   /* Aggiunge padding all'input */
   padding: 10px;
   /* Imposta lo stile del bordo */
-  border: 10px solid #007bff;
+  border: 10px solid #146ac7;
   /* Arrotonda i bordi dell'input */
   border-radius: 5px;
 }
@@ -406,7 +414,7 @@
   /* Arrotonda i bordi del pulsante */
   border-radius: 5px;
   /* Imposta il colore di sfondo del pulsante */
-  background-color: #007bff;
+  background-color: #146ac7;
   /* Imposta il colore del testo su bianco */
   color: white;
   /* Cambia il cursore quando ci si passa sopra */
@@ -466,9 +474,9 @@
 /* Stili per i messaggi inviati dall'utente */
 .sent-message .message-content {
   /* Imposta il colore di sfondo del contenitore del messaggio inviato */
-  background-color: #007bff;
+  background-color: #DCF8C6;
   /* Imposta il colore del testo su bianco */
-  color: white;
+  color: rgb(0, 0, 0);
 }
 
 /* Stili per il testo dei messaggi */
@@ -494,7 +502,7 @@
   /* Imposta il colore di riempimento di sfondo dell'icona */
   background-color: #24517e;
   /* Imposta lo spessore e lo stile del bordo dell'icona */
-  border: 2px solid #007bff;
+  border: 2px solid #146ac7;
   /* Arrotonda i bordi dell'icona */
   border-radius: 50%;
   /* Aggiunge padding intorno all'icona */
@@ -504,7 +512,7 @@
 /* Stili per le opzioni aggiuntive */
 .additional-features {
   /* Imposta il colore di sfondo */
-  background-color: #007bff;
+  background-color: #146ac7;
   /* Imposta il colore del testo su bianco */
   color: #fff;
   /* Imposta la larghezza dell'elemento */
@@ -631,7 +639,7 @@
 /* Stili per la visualizzazione della data nell'intestazione */
 .message-date-header {
   /* Imposta uno sfondo bianco per la data */
-  background-color: white;
+  background-color: rgb(255, 255, 255);
   /* Aggiunge ombra al bordo */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   /* Imposta il padding */
@@ -639,7 +647,7 @@
   /* Imposta la dimensione del testo */
   font-size: 16px;
   /* Imposta il colore del testo su grigio */
-  color: #161414;
+  color: #146ac7;
   /* Arrotonda i bordi */
   border-radius: 20px;
   /* Aggiunge margine sopra per separare la data dal resto dell'intestazione */
