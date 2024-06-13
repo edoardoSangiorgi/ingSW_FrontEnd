@@ -1,3 +1,4 @@
+
 <template>
 
   <!-- Input per selezionare un file immagine -->
@@ -26,6 +27,8 @@
   
     <!-- Contenitore dei messaggi di chat -->
     <div class="chat-messages">
+
+   
     <!-- Iterazione attraverso i messaggi -->
       <div v-for="(message, index) in messages" :key="index" :class="{'sent-message': message.sender === 'Tu', 'received-message': message.sender !== 'Tu'}">
       <!-- Icona del mittente -->
@@ -204,7 +207,7 @@
     // Utilizza il router per reindirizzare l'utente alla chat privata con l'ID dell'utente
     this.$router.push({ name: 'privateChat', params: { userId } });
   }
-
+  
 
   },
 };
@@ -256,7 +259,8 @@
   flex-grow: 1;
   /* Imposta la larghezza massima del titolo al 100% */
   max-width: 100%;
-}
+  
+} 
 
 
 /* Stili per il l'intestazione del gruppo */
@@ -634,6 +638,7 @@
   right: 0;
   top:0;
   
+  
 }
 
 /* Stili per la visualizzazione della data nell'intestazione */
@@ -657,9 +662,9 @@
   
 }
 
+
+
 </style>
-
-
 
 
 
